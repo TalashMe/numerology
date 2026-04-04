@@ -1,3 +1,20 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDO1OwmyGNsAx19DCLTpFte56kSu5h8-Cc",
+  authDomain: "anaya-numerology.firebaseapp.com",
+  projectId: "anaya-numerology",
+  storageBucket: "anaya-numerology.firebasestorage.app",
+  messagingSenderId: "206343207368",
+  appId: "1:206343207368:web:9f2626f01c3d478452a8fd"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +22,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Anaya — Numerology & Soul Guidance</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet"/>
+
+  <!-- ✅ Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // 🔧 STEP 1: Replace with YOUR Firebase config from console.firebase.google.com
+    const firebaseConfig = {
+      // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDO1OwmyGNsAx19DCLTpFte56kSu5h8-Cc",
+  authDomain: "anaya-numerology.firebaseapp.com",
+  projectId: "anaya-numerology",
+  storageBucket: "anaya-numerology.firebasestorage.app",
+  messagingSenderId: "206343207368",
+  appId: "1:206343207368:web:9f2626f01c3d478452a8fd"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window._db = db;
+    window._addDoc = addDoc;
+    window._collection = collection;
+    window._serverTimestamp = serverTimestamp;
+  </script>
+
+  <!-- ✅ EmailJS for email notifications -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    // 🔧 STEP 2: Replace with your EmailJS public key from emailjs.com
+    emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+  </script>
+
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -19,7 +79,6 @@
     }
 
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--ivory);
       color: var(--deep);
@@ -29,524 +88,163 @@
       cursor: none;
     }
 
-    /* Custom cursor */
     .cursor {
       width: 10px; height: 10px;
-      background: var(--gold);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
+      background: var(--gold); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9999;
       transition: transform 0.15s ease;
       transform: translate(-50%, -50%);
     }
     .cursor-ring {
       width: 36px; height: 36px;
-      border: 1px solid var(--gold);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
+      border: 1px solid var(--gold); border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9998;
       transition: transform 0.35s ease, width 0.3s, height 0.3s;
-      transform: translate(-50%, -50%);
-      opacity: 0.6;
+      transform: translate(-50%, -50%); opacity: 0.6;
     }
 
-    /* NAV */
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 28px 60px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(212,160,23,0.15);
     }
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      color: var(--deep);
-    }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; letter-spacing: 0.08em; color: var(--deep); }
     .nav-logo span { color: var(--gold); }
     .nav-links { display: flex; gap: 40px; list-style: none; }
-    .nav-links a {
-      text-decoration: none;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: color 0.3s;
-    }
+    .nav-links a { text-decoration: none; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); transition: color 0.3s; }
     .nav-links a:hover { color: var(--gold); }
-    .nav-cta {
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid var(--gold);
-      padding: 10px 24px;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-    .nav-cta:hover { background: var(--gold); color: var(--ivory); }
+    .nav-cta { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 10px 24px; text-decoration: none; transition: all 0.3s; }
+    .nav-cta:hover { background: var(--gold); color: #fff; }
 
-    /* HERO */
     .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      position: relative;
-      overflow: hidden;
-      background: #ffffff;
+      min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; overflow: hidden; background: #fff;
     }
     .hero-left {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 160px 60px 80px 80px;
-      position: relative;
-      z-index: 2;
-      background: #ffffff;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 160px 60px 80px 80px; position: relative; z-index: 2; background: #fff;
     }
-    .hero-tag {
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 36px;
-      opacity: 0;
-      animation: fadeUp 1s 0.2s forwards;
-    }
-    .hero-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3.5rem, 6vw, 6rem);
-      font-weight: 300;
-      line-height: 1.05;
-      color: var(--deep);
-      margin-bottom: 32px;
-      opacity: 0;
-      animation: fadeUp 1s 0.45s forwards;
-    }
-    .hero-title em {
-      font-style: italic;
-      color: var(--warm);
-    }
-    .hero-sub {
-      font-size: 0.88rem;
-      line-height: 1.9;
-      color: var(--muted);
-      max-width: 400px;
-      margin-bottom: 52px;
-      opacity: 0;
-      animation: fadeUp 1s 0.7s forwards;
-    }
-    .hero-actions {
-      display: flex; gap: 20px; align-items: center;
-      opacity: 0;
-      animation: fadeUp 1s 0.95s forwards;
-    }
-    .btn-primary {
-      background: var(--gold);
-      color: var(--ivory);
-      padding: 16px 40px;
-      text-decoration: none;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      transition: all 0.3s;
-      display: inline-block;
-    }
-    .btn-primary:hover { background: var(--deep); color: var(--ivory); }
-    .btn-ghost {
-      color: var(--muted);
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-bottom: 1px solid var(--cream);
-      padding-bottom: 2px;
-      transition: all 0.3s;
-    }
+    .hero-tag { font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 36px; opacity: 0; animation: fadeUp 1s 0.2s forwards; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 6vw, 6rem); font-weight: 300; line-height: 1.05; color: var(--deep); margin-bottom: 32px; opacity: 0; animation: fadeUp 1s 0.45s forwards; }
+    .hero-title em { font-style: italic; color: var(--warm); }
+    .hero-sub { font-size: 0.88rem; line-height: 1.9; color: var(--muted); max-width: 400px; margin-bottom: 52px; opacity: 0; animation: fadeUp 1s 0.7s forwards; }
+    .hero-actions { display: flex; gap: 20px; align-items: center; opacity: 0; animation: fadeUp 1s 0.95s forwards; }
+    .btn-primary { background: var(--gold); color: #fff; padding: 16px 40px; text-decoration: none; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; transition: all 0.3s; display: inline-block; }
+    .btn-primary:hover { background: var(--deep); color: #fff; }
+    .btn-ghost { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--cream); padding-bottom: 2px; transition: all 0.3s; }
     .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
 
-    .hero-right {
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-visual {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #0a1a5c 0%, #0d1b4b 50%, #071236 100%);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .mandala-wrap {
-      position: relative; width: 420px; height: 420px;
-      opacity: 0;
-      animation: fadeIn 2s 1.2s forwards;
-    }
-    .mandala-wrap svg {
-      width: 100%; height: 100%;
-      animation: rotateSlow 60s linear infinite;
-    }
-    .mandala-center {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-    .mandala-number {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 5rem;
-      font-weight: 300;
-      color: var(--gold-light);
-      line-height: 1;
-      opacity: 0;
-      animation: fadeIn 1.5s 2s forwards;
-    }
-    .mandala-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(212,160,23,0.5);
-      margin-top: 8px;
-    }
+    .hero-right { position: relative; overflow: hidden; }
+    .hero-visual { position: absolute; inset: 0; background: linear-gradient(135deg, #0a1a5c, #0d1b4b, #071236); display: flex; align-items: center; justify-content: center; }
+    .mandala-wrap { position: relative; width: 420px; height: 420px; opacity: 0; animation: fadeIn 2s 1.2s forwards; }
+    .mandala-wrap svg { width: 100%; height: 100%; animation: rotateSlow 60s linear infinite; }
+    .mandala-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+    .mandala-number { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; color: var(--gold-light); line-height: 1; opacity: 0; animation: fadeIn 1.5s 2s forwards; }
+    .mandala-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(212,160,23,0.5); margin-top: 8px; }
+    .particles { position: absolute; inset: 0; pointer-events: none; }
+    .particle { position: absolute; width: 2px; height: 2px; background: var(--gold); border-radius: 50%; opacity: 0; animation: floatParticle var(--dur) var(--delay) infinite ease-in-out; }
+    @keyframes floatParticle { 0%,100%{opacity:0;transform:translateY(0) scale(1)} 20%{opacity:0.6} 80%{opacity:0.3} 100%{transform:translateY(-80px) scale(0)} }
 
-    /* floating particles */
-    .particles {
-      position: absolute; inset: 0; pointer-events: none;
-    }
-    .particle {
-      position: absolute;
-      width: 2px; height: 2px;
-      background: var(--gold);
-      border-radius: 50%;
-      opacity: 0;
-      animation: floatParticle var(--dur) var(--delay) infinite ease-in-out;
-    }
-
-    @keyframes floatParticle {
-      0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
-      20% { opacity: 0.6; }
-      80% { opacity: 0.3; }
-      100% { transform: translateY(-80px) scale(0); }
-    }
-
-    /* NUMBERS STRIP */
-    .numbers-strip {
-      background: var(--deep);
-      padding: 28px 0;
-      overflow: hidden;
-      border-top: 1px solid rgba(212,160,23,0.2);
-    }
-    .strip-inner {
-      display: flex; gap: 80px;
-      animation: scrollStrip 20s linear infinite;
-      width: max-content;
-    }
-    .strip-item {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      color: rgba(212,160,23,0.4);
-      letter-spacing: 0.15em;
-      white-space: nowrap;
-      display: flex; align-items: center; gap: 20px;
-    }
+    .numbers-strip { background: var(--deep); padding: 28px 0; overflow: hidden; border-top: 1px solid rgba(212,160,23,0.2); }
+    .strip-inner { display: flex; gap: 80px; animation: scrollStrip 20s linear infinite; width: max-content; }
+    .strip-item { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: rgba(212,160,23,0.4); letter-spacing: 0.15em; white-space: nowrap; display: flex; align-items: center; gap: 20px; }
     .strip-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; opacity: 0.4; }
-    @keyframes scrollStrip { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes scrollStrip { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-    /* ABOUT */
-    .about {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 0;
-      max-width: 1200px;
-      margin: 120px auto;
-      padding: 0 60px;
-      align-items: center;
-    }
-    .about-numbers {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-    }
-    .num-card {
-      background: var(--cream);
-      padding: 48px 32px;
-      text-align: center;
-      transition: background 0.3s;
-    }
+    .about { display: grid; grid-template-columns: 1fr 1.2fr; gap: 0; max-width: 1200px; margin: 120px auto; padding: 0 60px; align-items: center; }
+    .about-numbers { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .num-card { background: var(--cream); padding: 48px 32px; text-align: center; transition: background 0.3s; }
     .num-card:first-child { background: var(--deep); }
     .num-card:hover { background: var(--gold); }
-    .num-card:hover .num-value, .num-card:hover .num-label { color: var(--ivory); }
-    .num-card:first-child .num-value, .num-card:first-child .num-label { color: var(--ivory); }
-    .num-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 3.5rem;
-      font-weight: 300;
-      color: var(--gold);
-      line-height: 1;
-      transition: color 0.3s;
-    }
-    .num-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 10px;
-      transition: color 0.3s;
-    }
+    .num-card:hover .num-value, .num-card:hover .num-label { color: #fff; }
+    .num-card:first-child .num-value, .num-card:first-child .num-label { color: #fff; }
+    .num-value { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 300; color: var(--gold); line-height: 1; transition: color 0.3s; }
+    .num-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 10px; transition: color 0.3s; }
     .about-text { padding: 0 0 0 80px; }
-    .section-tag {
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 24px;
-    }
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 3.5vw, 3.2rem);
-      font-weight: 300;
-      line-height: 1.15;
-      margin-bottom: 28px;
-    }
+    .section-tag { font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 300; line-height: 1.15; margin-bottom: 28px; }
     .section-title em { font-style: italic; color: var(--warm); }
-    .section-body {
-      font-size: 0.88rem;
-      line-height: 2;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-    .divider {
-      width: 48px; height: 1px;
-      background: var(--gold);
-      margin: 32px 0;
-    }
+    .section-body { font-size: 0.88rem; line-height: 2; color: var(--muted); margin-bottom: 20px; }
+    .divider { width: 48px; height: 1px; background: var(--gold); margin: 32px 0; }
 
-    /* SERVICES */
     .services { padding: 100px 60px; background: var(--deep); }
-    .services-header {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 80px;
-    }
-    .services-header .section-title { color: var(--ivory); }
-    .services-header .section-body { color: rgba(247,243,238,0.5); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .service-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(212,160,23,0.1);
-      padding: 52px 40px;
-      transition: all 0.4s;
-      position: relative;
-      overflow: hidden;
-    }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transition: transform 0.4s;
-    }
+    .services-header { text-align: center; max-width: 600px; margin: 0 auto 80px; }
+    .services-header .section-title { color: #fff; }
+    .services-header .section-body { color: rgba(255,255,255,0.45); }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; max-width: 1100px; margin: 0 auto; }
+    .service-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,160,23,0.1); padding: 52px 40px; transition: all 0.4s; position: relative; overflow: hidden; }
+    .service-card::before { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--gold); transform:scaleX(0); transition:transform 0.4s; }
     .service-card:hover { background: rgba(212,160,23,0.05); }
     .service-card:hover::before { transform: scaleX(1); }
-    .service-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 4rem;
-      font-weight: 300;
-      color: rgba(212,160,23,0.15);
-      line-height: 1;
-      margin-bottom: 24px;
-      transition: color 0.4s;
-    }
+    .service-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: rgba(212,160,23,0.15); line-height: 1; margin-bottom: 24px; transition: color 0.4s; }
     .service-card:hover .service-num { color: rgba(212,160,23,0.35); }
-    .service-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      font-weight: 400;
-      color: var(--ivory);
-      margin-bottom: 16px;
-    }
-    .service-desc {
-      font-size: 0.82rem;
-      line-height: 1.9;
-      color: rgba(247,243,238,0.45);
-      margin-bottom: 32px;
-    }
-    .service-link {
-      font-size: 0.65rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-      display: flex; align-items: center; gap: 10px;
-      transition: gap 0.3s;
-    }
+    .service-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: #fff; margin-bottom: 16px; }
+    .service-desc { font-size: 0.82rem; line-height: 1.9; color: rgba(255,255,255,0.45); margin-bottom: 32px; }
+    .service-link { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); text-decoration: none; display: flex; align-items: center; gap: 10px; transition: gap 0.3s; }
     .service-link:hover { gap: 18px; }
     .service-link::after { content: '→'; }
 
-    /* TESTIMONIALS */
     .testimonials { padding: 120px 60px; }
     .test-header { text-align: center; margin-bottom: 80px; }
-    .test-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .test-card {
-      border: 1px solid var(--cream);
-      padding: 44px 36px;
-      position: relative;
-    }
-    .test-quote {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 4rem;
-      color: var(--gold);
-      line-height: 0.5;
-      margin-bottom: 24px;
-      opacity: 0.4;
-    }
-    .test-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-style: italic;
-      color: var(--deep);
-      line-height: 1.7;
-      margin-bottom: 28px;
-    }
-    .test-name {
-      font-size: 0.68rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
+    .test-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; max-width: 1100px; margin: 0 auto; }
+    .test-card { border: 1px solid var(--cream); padding: 44px 36px; }
+    .test-quote { font-family: 'Cormorant Garamond', serif; font-size: 4rem; color: var(--gold); line-height: 0.5; margin-bottom: 24px; opacity: 0.4; }
+    .test-text { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--deep); line-height: 1.7; margin-bottom: 28px; }
+    .test-name { font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
     .test-role { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
 
-    /* CONTACT */
-    .contact {
-      background: linear-gradient(135deg, #0d1b4b, #162b6e);
-      padding: 120px 60px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .contact::before {
-      content: '∞';
-      position: absolute;
-      font-size: 40vw;
-      color: rgba(212,160,23,0.05);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: 'Cormorant Garamond', serif;
-      pointer-events: none;
-    }
+    /* CONTACT FORM */
+    .contact { background: linear-gradient(135deg, #0d1b4b, #162b6e); padding: 120px 60px; text-align: center; position: relative; overflow: hidden; }
+    .contact::before { content: '∞'; position: absolute; font-size: 40vw; color: rgba(212,160,23,0.05); top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Cormorant Garamond', serif; pointer-events: none; }
     .contact-inner { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
-    .contact .section-title { color: var(--ivory); font-size: clamp(2.5rem, 5vw, 4.5rem); }
-    .contact .section-body { color: rgba(247,243,238,0.5); margin-bottom: 56px; }
+    .contact .section-title { color: #fff; font-size: clamp(2.5rem,5vw,4.5rem); }
+    .contact .section-body { color: rgba(255,255,255,0.5); margin-bottom: 56px; }
     .contact-form { display: flex; flex-direction: column; gap: 16px; text-align: left; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 8px; }
-    .form-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(212,160,23,0.7);
-    }
-    .form-input, .form-select, .form-textarea {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(212,160,23,0.25);
-      color: var(--ivory);
-      padding: 14px 18px;
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 300;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--gold);
-    }
+    .form-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(212,160,23,0.7); }
+    .form-input, .form-select, .form-textarea { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,160,23,0.25); color: #fff; padding: 14px 18px; font-family: 'Josefin Sans', sans-serif; font-size: 0.82rem; font-weight: 300; outline: none; transition: border-color 0.3s; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.3); }
     .form-select option { background: #0d1b4b; }
     .form-textarea { resize: vertical; min-height: 100px; }
-    .btn-submit {
-      background: var(--gold);
-      color: var(--deep);
-      border: none;
-      padding: 18px 48px;
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      cursor: none;
-      transition: all 0.3s;
-      margin-top: 8px;
-      align-self: flex-start;
-    }
+    .btn-submit { background: var(--gold); color: var(--deep); border: none; padding: 18px 48px; font-family: 'Josefin Sans', sans-serif; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; margin-top: 8px; align-self: flex-start; }
     .btn-submit:hover { background: var(--gold-light); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* FOOTER */
-    footer {
-      background: var(--deep);
-      border-top: 1px solid rgba(212,160,23,0.15);
-      padding: 40px 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Toast notification */
+    .toast {
+      position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--deep); color: #fff; padding: 16px 32px;
+      font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase;
+      border-left: 3px solid var(--gold); z-index: 9999;
+      transition: transform 0.4s ease; white-space: nowrap;
     }
-    .footer-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      color: var(--ivory);
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { border-left-color: #e07b54; }
+
+    footer { background: var(--deep); border-top: 1px solid rgba(212,160,23,0.15); padding: 40px 60px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #fff; }
     .footer-logo span { color: var(--gold); }
-    .footer-copy {
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      color: rgba(247,243,238,0.3);
-    }
+    .footer-copy { font-size: 0.68rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.3); }
     .footer-links { display: flex; gap: 28px; }
-    .footer-links a {
-      font-size: 0.68rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(247,243,238,0.3);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
+    .footer-links a { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.3s; }
     .footer-links a:hover { color: var(--gold); }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes rotateSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* scroll reveal */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
     .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.9s, transform 0.9s; }
     .reveal.visible { opacity: 1; transform: none; }
 
     @media (max-width: 900px) {
-      nav { padding: 20px 28px; background: rgba(255,255,255,0.95); }
+      nav { padding: 20px 28px; background: rgba(255,255,255,0.96); }
       .nav-links { display: none; }
-      .hero { grid-template-columns: 1fr; background: #ffffff; min-height: auto; }
-      .hero-left { padding: 140px 32px 80px; background: #ffffff; }
+      .hero { grid-template-columns: 1fr; background: #fff; min-height: auto; }
+      .hero-left { padding: 140px 32px 80px; background: #fff; }
       .hero-right { display: none; }
       .about { grid-template-columns: 1fr; padding: 0 28px; }
       .about-text { padding: 48px 0 0; }
@@ -561,6 +259,7 @@
 
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
+  <div class="toast" id="toast"></div>
 
   <!-- NAV -->
   <nav>
@@ -594,9 +293,7 @@
             <circle cx="210" cy="210" r="160" stroke="#d4a017" stroke-width="0.3" opacity="0.25"/>
             <circle cx="210" cy="210" r="120" stroke="#d4a017" stroke-width="0.5" stroke-dasharray="2 6" opacity="0.3"/>
             <circle cx="210" cy="210" r="80" stroke="#d4a017" stroke-width="0.3" opacity="0.2"/>
-            <!-- Octagram -->
             <polygon points="210,30 225,165 360,150 235,210 360,270 225,255 210,390 195,255 60,270 185,210 60,150 195,165" fill="none" stroke="#d4a017" stroke-width="0.6" opacity="0.35"/>
-            <!-- Inner petals -->
             <ellipse cx="210" cy="130" rx="18" ry="50" fill="none" stroke="#d4a017" stroke-width="0.5" opacity="0.3"/>
             <ellipse cx="210" cy="130" rx="18" ry="50" fill="none" stroke="#d4a017" stroke-width="0.5" opacity="0.3" transform="rotate(45 210 210)"/>
             <ellipse cx="210" cy="130" rx="18" ry="50" fill="none" stroke="#d4a017" stroke-width="0.5" opacity="0.3" transform="rotate(90 210 210)"/>
@@ -626,22 +323,10 @@
   <!-- ABOUT -->
   <section class="about" id="about">
     <div class="about-numbers reveal">
-      <div class="num-card">
-        <div class="num-value">12+</div>
-        <div class="num-label">Years of Practice</div>
-      </div>
-      <div class="num-card">
-        <div class="num-value">3K</div>
-        <div class="num-label">Readings Given</div>
-      </div>
-      <div class="num-card">
-        <div class="num-value">9</div>
-        <div class="num-label">Core Systems</div>
-      </div>
-      <div class="num-card">
-        <div class="num-value">∞</div>
-        <div class="num-label">Possibilities</div>
-      </div>
+      <div class="num-card"><div class="num-value">12+</div><div class="num-label">Years of Practice</div></div>
+      <div class="num-card"><div class="num-value">3K</div><div class="num-label">Readings Given</div></div>
+      <div class="num-card"><div class="num-value">9</div><div class="num-label">Core Systems</div></div>
+      <div class="num-card"><div class="num-value">∞</div><div class="num-label">Possibilities</div></div>
     </div>
     <div class="about-text reveal">
       <p class="section-tag">✦ About Anaya</p>
@@ -649,54 +334,24 @@
       <div class="divider"></div>
       <p class="section-body">I am Anaya — a numerologist, intuitive guide, and life path interpreter. For over a decade, I have helped individuals navigate careers, relationships, and purpose through the sacred geometry of numbers.</p>
       <p class="section-body">Drawing from Pythagorean and Chaldean traditions, I craft personalized readings that illuminate who you are, where you've been, and where you're meant to go.</p>
-      <a href="#contact" class="btn-primary" style="margin-top: 8px;">Work With Me</a>
+      <a href="#contact" class="btn-primary" style="margin-top:8px;">Work With Me</a>
     </div>
   </section>
 
   <!-- SERVICES -->
   <section class="services" id="services">
     <div class="services-header reveal">
-      <p class="section-tag" style="color: rgba(212,160,23,0.8)">✦ What I Offer</p>
-      <h2 class="section-title" style="color: var(--ivory)">Readings &<br><em>Guidance</em></h2>
+      <p class="section-tag" style="color:rgba(212,160,23,0.8)">✦ What I Offer</p>
+      <h2 class="section-title">Readings &<br><em>Guidance</em></h2>
       <p class="section-body">Each session is a sacred space — tailored entirely to your numbers, your questions, and your path.</p>
     </div>
     <div class="services-grid">
-      <div class="service-card reveal">
-        <div class="service-num">01</div>
-        <div class="service-name">Life Path Reading</div>
-        <div class="service-desc">A deep dive into your core number — the master blueprint of your soul's journey, strengths, challenges, and ultimate purpose.</div>
-        <a href="#contact" class="service-link">Book Session</a>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-num">02</div>
-        <div class="service-name">Name Numerology</div>
-        <div class="service-desc">Your name is a vibrational signature. Discover how it aligns — or conflicts — with your destiny, and whether a shift could change everything.</div>
-        <a href="#contact" class="service-link">Book Session</a>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-num">03</div>
-        <div class="service-name">Relationship Compatibility</div>
-        <div class="service-desc">Explore the numerological harmony (or tension) between you and a partner, colleague, or family member. Understand the dynamic at its root.</div>
-        <a href="#contact" class="service-link">Book Session</a>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-num">04</div>
-        <div class="service-name">Personal Year Forecast</div>
-        <div class="service-desc">Know what energy cycle you're in this year — and how to navigate it. Timing is everything, and numbers reveal the rhythm of your life.</div>
-        <a href="#contact" class="service-link">Book Session</a>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-num">05</div>
-        <div class="service-name">Business Numerology</div>
-        <div class="service-desc">Is your business name aligned with abundance? From launch dates to branding, ensure your enterprise vibrates with success.</div>
-        <a href="#contact" class="service-link">Book Session</a>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-num">06</div>
-        <div class="service-name">Full Numeroscope</div>
-        <div class="service-desc">The complete portrait — all core numbers, personal cycles, soul urge, destiny, karmic lessons, and a 12-month forecast. The ultimate reading.</div>
-        <a href="#contact" class="service-link">Book Session</a>
-      </div>
+      <div class="service-card reveal"><div class="service-num">01</div><div class="service-name">Life Path Reading</div><div class="service-desc">A deep dive into your core number — the master blueprint of your soul's journey, strengths, challenges, and ultimate purpose.</div><a href="#contact" class="service-link">Book Session</a></div>
+      <div class="service-card reveal"><div class="service-num">02</div><div class="service-name">Name Numerology</div><div class="service-desc">Your name is a vibrational signature. Discover how it aligns — or conflicts — with your destiny, and whether a shift could change everything.</div><a href="#contact" class="service-link">Book Session</a></div>
+      <div class="service-card reveal"><div class="service-num">03</div><div class="service-name">Relationship Compatibility</div><div class="service-desc">Explore the numerological harmony between you and a partner, colleague, or family member. Understand the dynamic at its root.</div><a href="#contact" class="service-link">Book Session</a></div>
+      <div class="service-card reveal"><div class="service-num">04</div><div class="service-name">Personal Year Forecast</div><div class="service-desc">Know what energy cycle you're in this year — and how to navigate it. Timing is everything, and numbers reveal the rhythm of your life.</div><a href="#contact" class="service-link">Book Session</a></div>
+      <div class="service-card reveal"><div class="service-num">05</div><div class="service-name">Business Numerology</div><div class="service-desc">Is your business name aligned with abundance? From launch dates to branding, ensure your enterprise vibrates with success.</div><a href="#contact" class="service-link">Book Session</a></div>
+      <div class="service-card reveal"><div class="service-num">06</div><div class="service-name">Full Numeroscope</div><div class="service-desc">The complete portrait — all core numbers, personal cycles, soul urge, destiny, karmic lessons, and a 12-month forecast.</div><a href="#contact" class="service-link">Book Session</a></div>
     </div>
   </section>
 
@@ -707,51 +362,40 @@
       <h2 class="section-title">What the<br><em>Numbers</em> revealed</h2>
     </div>
     <div class="test-grid">
-      <div class="test-card reveal">
-        <div class="test-quote">"</div>
-        <p class="test-text">Anaya's reading gave me clarity I had been searching for years. She described my life path with stunning accuracy — things no one could have known.</p>
-        <div class="test-name">Priya Mehta</div>
-        <div class="test-role">Entrepreneur, Mumbai</div>
-      </div>
-      <div class="test-card reveal">
-        <div class="test-quote">"</div>
-        <p class="test-text">I came skeptical and left transformed. The business name reading alone was worth every rupee. We rebranded and our revenue grew 3x within a year.</p>
-        <div class="test-name">Rahul Sinha</div>
-        <div class="test-role">Founder, Bangalore</div>
-      </div>
-      <div class="test-card reveal">
-        <div class="test-quote">"</div>
-        <p class="test-text">The relationship reading helped my husband and I understand each other on a soul level. We stopped fighting patterns we now finally understand.</p>
-        <div class="test-name">Aarti Bose</div>
-        <div class="test-role">Author, Delhi</div>
-      </div>
+      <div class="test-card reveal"><div class="test-quote">"</div><p class="test-text">Anaya's reading gave me clarity I had been searching for years. She described my life path with stunning accuracy — things no one could have known.</p><div class="test-name">Priya Mehta</div><div class="test-role">Entrepreneur, Mumbai</div></div>
+      <div class="test-card reveal"><div class="test-quote">"</div><p class="test-text">I came skeptical and left transformed. The business name reading alone was worth every rupee. We rebranded and our revenue grew 3x within a year.</p><div class="test-name">Rahul Sinha</div><div class="test-role">Founder, Bangalore</div></div>
+      <div class="test-card reveal"><div class="test-quote">"</div><p class="test-text">The relationship reading helped my husband and I understand each other on a soul level. We stopped fighting patterns we now finally understand.</p><div class="test-name">Aarti Bose</div><div class="test-role">Author, Delhi</div></div>
     </div>
   </section>
 
-  <!-- CONTACT -->
+  <!-- CONTACT FORM -->
   <section class="contact" id="contact">
     <div class="contact-inner">
-      <p class="section-tag" style="color: rgba(212,160,23,0.8)">✦ Begin Your Reading</p>
+      <p class="section-tag" style="color:rgba(212,160,23,0.8)">✦ Begin Your Reading</p>
       <h2 class="section-title">Your numbers<br>are <em>waiting</em></h2>
       <p class="section-body">Fill in your details below and I'll reach out within 24 hours to schedule your session.</p>
       <div class="contact-form">
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Full Name</label>
-            <input type="text" class="form-input" placeholder="As on birth certificate" />
+            <input type="text" id="f-name" class="form-input" placeholder="As on birth certificate" required />
           </div>
           <div class="form-group">
             <label class="form-label">Date of Birth</label>
-            <input type="date" class="form-input" />
+            <input type="date" id="f-dob" class="form-input" required />
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input type="email" class="form-input" placeholder="you@example.com" />
+          <input type="email" id="f-email" class="form-input" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp Number</label>
+          <input type="tel" id="f-phone" class="form-input" placeholder="+91 98765 43210" />
         </div>
         <div class="form-group">
           <label class="form-label">Service Interested In</label>
-          <select class="form-select form-input">
+          <select id="f-service" class="form-select form-input" required>
             <option value="">Select a reading...</option>
             <option>Life Path Reading</option>
             <option>Name Numerology</option>
@@ -763,9 +407,9 @@
         </div>
         <div class="form-group">
           <label class="form-label">Your Question or Intention</label>
-          <textarea class="form-textarea form-input" placeholder="What are you seeking clarity on?"></textarea>
+          <textarea id="f-message" class="form-textarea form-input" placeholder="What are you seeking clarity on?"></textarea>
         </div>
-        <button class="btn-submit">Send My Details →</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitBooking()">Send My Details →</button>
       </div>
     </div>
   </section>
@@ -777,60 +421,97 @@
     <div class="footer-links">
       <a href="#">Instagram</a>
       <a href="#">WhatsApp</a>
-      <a href="#">Privacy</a>
+      <a href="admin.html">Admin</a>
     </div>
   </footer>
 
   <script>
-    // Cursor
+    // ─── Custom Cursor ───
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx + 'px';
-      cursor.style.top = my + 'px';
-    });
-    function animateRing() {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.left = rx + 'px';
-      ring.style.top = ry + 'px';
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        ring.style.width = '56px'; ring.style.height = '56px';
-        cursor.style.transform = 'translate(-50%,-50%) scale(1.6)';
-      });
-      el.addEventListener('mouseleave', () => {
-        ring.style.width = '36px'; ring.style.height = '36px';
-        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-      });
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+    (function animateRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animateRing); })();
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter',()=>{ ring.style.width='56px'; ring.style.height='56px'; cursor.style.transform='translate(-50%,-50%) scale(1.6)'; });
+      el.addEventListener('mouseleave',()=>{ ring.style.width='36px'; ring.style.height='36px'; cursor.style.transform='translate(-50%,-50%) scale(1)'; });
     });
 
-    // Particles
-    const pContainer = document.getElementById('particles');
-    if (pContainer) {
-      for (let i = 0; i < 28; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${3+Math.random()*5}s;--delay:${Math.random()*6}s;`;
-        pContainer.appendChild(p);
+    // ─── Particles ───
+    const pC = document.getElementById('particles');
+    if(pC){ for(let i=0;i<28;i++){ const p=document.createElement('div'); p.className='particle'; p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${3+Math.random()*5}s;--delay:${Math.random()*6}s;`; pC.appendChild(p); } }
+
+    // ─── Scroll Reveal ───
+    const obs = new IntersectionObserver(entries => { entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*80); }); }, {threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // ─── Toast ───
+    function showToast(msg, isError=false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (isError ? ' error' : '');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    // ─── FORM SUBMIT ───
+    async function submitBooking() {
+      const name    = document.getElementById('f-name').value.trim();
+      const dob     = document.getElementById('f-dob').value;
+      const email   = document.getElementById('f-email').value.trim();
+      const phone   = document.getElementById('f-phone').value.trim();
+      const service = document.getElementById('f-service').value;
+      const message = document.getElementById('f-message').value.trim();
+
+      if (!name || !dob || !email || !service) {
+        showToast('Please fill in all required fields.', true);
+        return;
       }
-    }
 
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 80);
-        }
-      });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => obs.observe(el));
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const booking = { name, dob, email, phone, service, message, createdAt: window._serverTimestamp(), status: 'new' };
+
+      try {
+        // ✅ 1. Save to Firebase Firestore
+        await window._addDoc(window._collection(window._db, 'bookings'), booking);
+
+        // ✅ 2. Send Email via EmailJS
+        // 🔧 STEP 3: Replace service_id & template_id from your EmailJS dashboard
+        await emailjs.send("service_anaya", "template_2rm2r92", "YOUR_TEMPLATE_ID", {
+          to_name: "Anaya",
+          from_name: name,
+          from_email: email,
+          dob: dob,
+          service: service,
+          phone: phone,
+          message: message || "No message provided"
+        });
+
+        // ✅ 3. WhatsApp alert (opens WhatsApp with pre-filled message)
+        // 🔧 STEP 4: Replace with Anaya's WhatsApp number (with country code, no + or spaces)
+        const waNumber = "919764143693";
+        const waMsg = encodeURIComponent(`🔮 New Booking!\n👤 ${name}\n📅 DOB: ${dob}\n📧 ${email}\n📱 ${phone}\n✨ Service: ${service}\n💬 ${message}`);
+        // Opens WhatsApp silently as a notification link (won't redirect user)
+        const waLink = `https://api.whatsapp.com/send?phone=${waNumber}&text=${waMsg}`;
+        // Store link so admin can open it
+        localStorage.setItem('lastWALink', waLink);
+
+        showToast('✦ Booking received! I will reach out within 24 hours.');
+        // Clear form
+        ['f-name','f-dob','f-email','f-phone','f-message'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('f-service').value = '';
+
+      } catch (err) {
+        console.error(err);
+        showToast('Something went wrong. Please try again.', true);
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Send My Details →';
+    }
   </script>
 </body>
 </html>
