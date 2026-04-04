@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anaya — Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet"/>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, updateDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // 🔧 Same Firebase config as index.html
+    const firebaseConfig = {
+      // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDO1OwmyGNsAx19DCLTpFte56kSu5h8-Cc",
+  authDomain: "anaya-numerology.firebaseapp.com",
+  projectId: "anaya-numerology",
+  storageBucket: "anaya-numerology.firebasestorage.app",
+  messagingSenderId: "206343207368",
+  appId: "1:206343207368:web:9f2626f01c3d478452a8fd"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    window._db = db;
+    window._auth = auth;
+    window._collection = collection;
+    window._getDocs = getDocs;
+    window._updateDoc = updateDoc;
+    window._doc = doc;
+    window._orderBy = orderBy;
+    window._query = query;
+    window._signInWithEmailAndPassword = signInWithEmailAndPassword;
+    window._signOut = signOut;
+    window._onAuthStateChanged = onAuthStateChanged;
+
+    // Auto-detect auth state
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadBookings();
+      } else {
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('dashboard').style.display = 'none';
+      }
+    });
+  </script>
+
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --navy: #0d1b4b;
+      --gold: #d4a017;
+      --gold-light: #f0c040;
+      --cream: #eef3fc;
+      --white: #ffffff;
+      --muted: #4a6fa5;
+      --success: #2e9e6b;
+      --pending: #d4a017;
+    }
+    body { font-family: 'Josefin Sans', sans-serif; font-weight: 300; background: #f4f7ff; color: var(--navy); min-height: 100vh; }
+
+    /* LOGIN */
+    #login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0d1b4b, #162b6e);
+    }
+    .login-card { background: #fff; padding: 56px 48px; width: 400px; text-align: center; }
+    .login-logo { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--navy); margin-bottom: 8px; }
+    .login-logo span { color: var(--gold); }
+    .login-sub { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 40px; }
+    .login-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; text-align: left; }
+    .login-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .login-input { border: 1px solid #dce6f7; padding: 13px 16px; font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.3s; color: var(--navy); }
+    .login-input:focus { border-color: var(--gold); }
+    .login-btn { width: 100%; background: var(--gold); color: #fff; border: none; padding: 15px; font-family: 'Josefin Sans', sans-serif; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; margin-top: 8px; }
+    .login-btn:hover { background: var(--navy); }
+    .login-error { font-size: 0.75rem; color: #c0392b; margin-top: 12px; min-height: 18px; }
+
+    /* DASHBOARD */
+    #dashboard { display: none; }
+    .topbar {
+      background: var(--navy); padding: 18px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 2px solid var(--gold);
+    }
+    .topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: #fff; }
+    .topbar-logo span { color: var(--gold); }
+    .topbar-right { display: flex; align-items: center; gap: 24px; }
+    .topbar-tag { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .logout-btn { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: none; border: 1px solid rgba(212,160,23,0.4); padding: 8px 18px; cursor: pointer; transition: all 0.3s; }
+    .logout-btn:hover { background: var(--gold); color: #fff; }
+
+    .dash-content { padding: 40px; max-width: 1200px; margin: 0 auto; }
+
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 40px; }
+    .stat-card { background: #fff; padding: 28px 24px; border-left: 3px solid var(--gold); }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 400; color: var(--navy); line-height: 1; }
+    .stat-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+
+    /* Filter bar */
+    .filter-bar { display: flex; gap: 12px; margin-bottom: 24px; align-items: center; flex-wrap: wrap; }
+    .filter-btn { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 9px 20px; border: 1px solid #dce6f7; background: #fff; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .search-input { margin-left: auto; border: 1px solid #dce6f7; padding: 9px 16px; font-family: 'Josefin Sans', sans-serif; font-size: 0.8rem; outline: none; width: 220px; }
+    .search-input:focus { border-color: var(--gold); }
+
+    /* Table */
+    .table-wrap { background: #fff; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--navy); }
+    th { padding: 14px 18px; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); text-align: left; font-weight: 400; }
+    td { padding: 16px 18px; font-size: 0.8rem; border-bottom: 1px solid #eef3fc; vertical-align: top; }
+    tr:hover td { background: #f8faff; }
+    .td-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 400; color: var(--navy); }
+    .td-service { color: var(--muted); font-size: 0.75rem; }
+    .badge { display: inline-block; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; }
+    .badge-new { background: #fff3cd; color: #856404; }
+    .badge-contacted { background: #d1ecf1; color: #0c5460; }
+    .badge-done { background: #d4edda; color: #155724; }
+    .action-btn { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 14px; border: 1px solid #dce6f7; background: none; cursor: pointer; color: var(--muted); transition: all 0.2s; margin-right: 6px; }
+    .action-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+    .wa-btn { background: #25d366; color: #fff; border-color: #25d366; }
+    .wa-btn:hover { background: #1ebe5d; }
+    .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.1em; }
+    .loading { text-align: center; padding: 60px; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+    @media(max-width:768px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .dash-content { padding: 20px; }
+      .topbar { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">Ana<span>ya</span></div>
+      <div class="login-sub">Admin Portal</div>
+      <div class="login-field">
+        <label class="login-label">Email</label>
+        <input type="email" id="admin-email" class="login-input" placeholder="admin@anaya.com" />
+      </div>
+      <div class="login-field">
+        <label class="login-label">Password</label>
+        <input type="password" id="admin-pass" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" />
+      </div>
+      <button class="login-btn" onclick="doLogin()">Sign In →</button>
+      <div class="login-error" id="login-error"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="topbar">
+      <div class="topbar-logo">Ana<span>ya</span> <span style="font-size:0.9rem;color:rgba(255,255,255,0.3);font-family:'Josefin Sans';font-weight:200;margin-left:10px;">Admin</span></div>
+      <div class="topbar-right">
+        <span class="topbar-tag" id="admin-email-display"></span>
+        <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+      </div>
+    </div>
+
+    <div class="dash-content">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-value" id="stat-total">—</div><div class="stat-label">Total Bookings</div></div>
+        <div class="stat-card" style="border-color:#856404"><div class="stat-value" id="stat-new">—</div><div class="stat-label">New / Pending</div></div>
+        <div class="stat-card" style="border-color:#0c5460"><div class="stat-value" id="stat-contacted">—</div><div class="stat-label">Contacted</div></div>
+        <div class="stat-card" style="border-color:#155724"><div class="stat-value" id="stat-done">—</div><div class="stat-label">Completed</div></div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterBookings('all', this)">All</button>
+        <button class="filter-btn" onclick="filterBookings('new', this)">New</button>
+        <button class="filter-btn" onclick="filterBookings('contacted', this)">Contacted</button>
+        <button class="filter-btn" onclick="filterBookings('done', this)">Done</button>
+        <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="renderTable()" />
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <div class="loading" id="table-loading">✦ Loading bookings...</div>
+        <table id="bookings-table" style="display:none">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Contact</th>
+              <th>DOB</th>
+              <th>Service</th>
+              <th>Message</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state" style="display:none">No bookings found.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allBookings = [];
+    let currentFilter = 'all';
+
+    // ── Login ──
+    async function doLogin() {
+      const email = document.getElementById('admin-email').value.trim();
+      const pass  = document.getElementById('admin-pass').value;
+      const errEl = document.getElementById('login-error');
+      errEl.textContent = '';
+      try {
+        await window._signInWithEmailAndPassword(window._auth, email, pass);
+      } catch(e) {
+        errEl.textContent = 'Invalid email or password.';
+      }
+    }
+
+    // ── Logout ──
+    async function doLogout() {
+      await window._signOut(window._auth);
+    }
+
+    // ── Load bookings from Firestore ──
+    async function loadBookings() {
+      const user = window._auth.currentUser;
+      if (user) document.getElementById('admin-email-display').textContent = user.email;
+
+      try {
+        const q = window._query(window._collection(window._db, 'bookings'), window._orderBy('createdAt', 'desc'));
+        const snap = await window._getDocs(q);
+        allBookings = [];
+        snap.forEach(d => allBookings.push({ id: d.id, ...d.data() }));
+        updateStats();
+        renderTable();
+        document.getElementById('table-loading').style.display = 'none';
+        document.getElementById('bookings-table').style.display = 'table';
+      } catch(e) {
+        document.getElementById('table-loading').textContent = 'Error loading bookings. Check Firestore rules.';
+        console.error(e);
+      }
+    }
+
+    // ── Stats ──
+    function updateStats() {
+      document.getElementById('stat-total').textContent = allBookings.length;
+      document.getElementById('stat-new').textContent = allBookings.filter(b => b.status === 'new').length;
+      document.getElementById('stat-contacted').textContent = allBookings.filter(b => b.status === 'contacted').length;
+      document.getElementById('stat-done').textContent = allBookings.filter(b => b.status === 'done').length;
+    }
+
+    // ── Filter ──
+    function filterBookings(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTable();
+    }
+
+    // ── Render Table ──
+    function renderTable() {
+      const search = document.getElementById('search-input').value.toLowerCase();
+      let filtered = allBookings;
+
+      if (currentFilter !== 'all') filtered = filtered.filter(b => b.status === currentFilter);
+      if (search) filtered = filtered.filter(b =>
+        (b.name||'').toLowerCase().includes(search) ||
+        (b.email||'').toLowerCase().includes(search) ||
+        (b.service||'').toLowerCase().includes(search)
+      );
+
+      const tbody = document.getElementById('table-body');
+      const empty = document.getElementById('empty-state');
+
+      if (!filtered.length) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      tbody.innerHTML = filtered.map((b, i) => {
+        const date = b.createdAt?.toDate ? b.createdAt.toDate().toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'}) : '—';
+        const badgeClass = { new: 'badge-new', contacted: 'badge-contacted', done: 'badge-done' }[b.status] || 'badge-new';
+        const waMsg = encodeURIComponent(`Hi ${b.name}! 🙏 This is Anaya. Thank you for booking a *${b.service}* reading. I'll be in touch shortly to schedule your session. ✨`);
+        const waLink = b.phone ? `https://wa.me/${b.phone.replace(/\D/g,'')}?text=${waMsg}` : null;
+
+        return `<tr>
+          <td style="color:var(--muted);font-size:0.7rem">${i+1}</td>
+          <td><div class="td-name">${b.name||'—'}</div></td>
+          <td>
+            <div style="font-size:0.78rem">${b.email||'—'}</div>
+            <div style="color:var(--muted);font-size:0.72rem;margin-top:3px">${b.phone||'—'}</div>
+          </td>
+          <td style="font-size:0.78rem">${b.dob||'—'}</td>
+          <td><div class="td-service">${b.service||'—'}</div></td>
+          <td style="font-size:0.76rem;color:var(--muted);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${b.message||''}">${b.message||'—'}</td>
+          <td style="font-size:0.72rem;color:var(--muted)">${date}</td>
+          <td><span class="badge ${badgeClass}">${b.status||'new'}</span></td>
+          <td>
+            ${waLink ? `<button class="action-btn wa-btn" onclick="window.open('${waLink}','_blank')">WhatsApp</button>` : ''}
+            <button class="action-btn" onclick="updateStatus('${b.id}','contacted')">Contacted</button>
+            <button class="action-btn" onclick="updateStatus('${b.id}','done')">Done ✓</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ── Update Status ──
+    async function updateStatus(id, status) {
+      try {
+        await window._updateDoc(window._doc(window._db, 'bookings', id), { status });
+        const booking = allBookings.find(b => b.id === id);
+        if (booking) booking.status = status;
+        updateStats();
+        renderTable();
+      } catch(e) {
+        alert('Error updating status: ' + e.message);
+      }
+    }
+  </script>
+</body>
+</html>
