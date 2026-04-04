@@ -6,51 +6,26 @@
   <title>Anaya — Admin Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet"/>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, updateDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
+  <!-- ✅ Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script>
     // 🔧 Same Firebase config as index.html
     const firebaseConfig = {
-      // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDO1OwmyGNsAx19DCLTpFte56kSu5h8-Cc",
-  authDomain: "anaya-numerology.firebaseapp.com",
-  projectId: "anaya-numerology",
-  storageBucket: "anaya-numerology.firebasestorage.app",
-  messagingSenderId: "206343207368",
-  appId: "1:206343207368:web:9f2626f01c3d478452a8fd"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    window._db = db;
-    window._auth = auth;
-    window._collection = collection;
-    window._getDocs = getDocs;
-    window._updateDoc = updateDoc;
-    window._doc = doc;
-    window._orderBy = orderBy;
-    window._query = query;
-    window._signInWithEmailAndPassword = signInWithEmailAndPassword;
-    window._signOut = signOut;
-    window._onAuthStateChanged = onAuthStateChanged;
+    firebase.initializeApp(firebaseConfig);
+    window._db = firebase.firestore();
+    window._auth = firebase.auth();
 
     // Auto-detect auth state
-    onAuthStateChanged(auth, user => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
@@ -232,7 +207,7 @@ const app = initializeApp(firebaseConfig);
       const errEl = document.getElementById('login-error');
       errEl.textContent = '';
       try {
-        await window._signInWithEmailAndPassword(window._auth, email, pass);
+        await firebase.auth().signInWithEmailAndPassword(email, pass);
       } catch(e) {
         errEl.textContent = 'Invalid email or password.';
       }
@@ -240,7 +215,7 @@ const app = initializeApp(firebaseConfig);
 
     // ── Logout ──
     async function doLogout() {
-      await window._signOut(window._auth);
+      await firebase.auth().signOut();
     }
 
     // ── Load bookings from Firestore ──
@@ -249,8 +224,7 @@ const app = initializeApp(firebaseConfig);
       if (user) document.getElementById('admin-email-display').textContent = user.email;
 
       try {
-        const q = window._query(window._collection(window._db, 'bookings'), window._orderBy('createdAt', 'desc'));
-        const snap = await window._getDocs(q);
+        const snap = await window._db.collection('bookings').orderBy('createdAt', 'desc').get();
         allBookings = [];
         snap.forEach(d => allBookings.push({ id: d.id, ...d.data() }));
         updateStats();
@@ -331,7 +305,7 @@ const app = initializeApp(firebaseConfig);
     // ── Update Status ──
     async function updateStatus(id, status) {
       try {
-        await window._updateDoc(window._doc(window._db, 'bookings', id), { status });
+        await window._db.collection('bookings').doc(id).update({ status });
         const booking = allBookings.find(b => b.id === id);
         if (booking) booking.status = status;
         updateStats();
