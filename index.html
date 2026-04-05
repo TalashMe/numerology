@@ -184,6 +184,107 @@
     .footer-links a { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.3s; }
     .footer-links a:hover { color: var(--gold); }
 
+
+
+    /* ── ABOUT NUMEROLOGY ── */
+    .about-num { background: #fff; }
+
+    .anum-intro {
+      text-align: center; padding: 100px 60px 80px;
+      background: #fff;
+    }
+    .anum-intro .section-title { margin-bottom: 24px; }
+
+    /* Benefits */
+    .anum-benefits { padding: 80px 60px; background: var(--cream); }
+    .anum-benefits-title { text-align: center; margin-bottom: 56px; }
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 2px; max-width: 1100px; margin: 0 auto;
+    }
+    .benefit-card {
+      background: #fff; padding: 40px 32px;
+      transition: all 0.3s; border-bottom: 2px solid transparent;
+    }
+    .benefit-card:hover { border-bottom-color: var(--gold); transform: translateY(-4px); }
+    .benefit-icon { font-size: 2rem; margin-bottom: 16px; }
+    .benefit-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.25rem;
+      font-weight: 400; color: var(--deep); margin-bottom: 12px;
+    }
+    .benefit-desc { font-size: 0.82rem; line-height: 1.9; color: var(--muted); }
+
+    /* Celebrities */
+    .anum-celebs { padding: 100px 60px; background: var(--deep); }
+    .celebs-header { text-align: center; max-width: 680px; margin: 0 auto 70px; }
+    .celebs-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 2px; max-width: 1100px; margin: 0 auto;
+    }
+    .celeb-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(212,160,23,0.1);
+      padding: 44px 32px; transition: all 0.4s; position: relative;
+    }
+    .celeb-card:hover { background: rgba(212,160,23,0.06); border-color: rgba(212,160,23,0.3); }
+    .celeb-num {
+      font-family: 'Cormorant Garamond', serif; font-size: 3.5rem;
+      font-weight: 300; color: rgba(212,160,23,0.25); line-height: 1;
+      margin-bottom: 20px; transition: color 0.4s;
+    }
+    .celeb-card:hover .celeb-num { color: rgba(212,160,23,0.6); }
+    .celeb-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+      font-weight: 400; color: #fff; margin-bottom: 4px;
+    }
+    .celeb-role {
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .celeb-fact { font-size: 0.79rem; line-height: 1.9; color: rgba(255,255,255,0.45); }
+
+    @media(max-width:900px){
+      .anum-intro, .anum-benefits { padding: 70px 28px; }
+      .anum-celebs { padding: 70px 28px; }
+      .benefits-grid, .celebs-grid { grid-template-columns: 1fr; }
+    }
+
+
+    .celebs-category-label {
+      font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(212,160,23,0.6); margin-bottom: 24px; margin-top: 8px;
+      padding-left: 4px;
+    }
+    .celeb-card-sport { border-color: rgba(212,160,23,0.15); }
+    .sport-badge {
+      display: inline-block; background: rgba(212,160,23,0.12);
+      border: 1px solid rgba(212,160,23,0.3); padding: 4px 14px;
+      border-radius: 2px; font-size: 2.2rem !important;
+      margin-bottom: 16px !important;
+    }
+    .num9-callout {
+      margin-top: 48px; max-width: 1100px;
+      background: rgba(212,160,23,0.08);
+      border: 1px solid rgba(212,160,23,0.25);
+      border-left: 4px solid var(--gold);
+      padding: 40px 48px;
+      display: flex; align-items: center; gap: 40px;
+    }
+    .num9-icon {
+      font-family: 'Cormorant Garamond', serif; font-size: 6rem;
+      font-weight: 300; color: var(--gold); line-height: 1; flex-shrink: 0;
+      opacity: 0.8;
+    }
+    .num9-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+      color: #fff; margin-bottom: 14px; font-weight: 400;
+    }
+    .num9-desc { font-size: 0.84rem; line-height: 2; color: rgba(255,255,255,0.55); }
+    .num9-desc strong { color: var(--gold); }
+    @media(max-width:900px){
+      .num9-callout { flex-direction: column; gap: 20px; padding: 28px 24px; }
+      .num9-icon { font-size: 4rem; }
+    }
+
     @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
     @keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
@@ -216,6 +317,7 @@
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#testimonials">Stories</a></li>
+      <li><a href="#about-numerology">Numerology</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <a href="#contact" class="nav-cta">Book a Reading</a>
@@ -277,7 +379,7 @@
       <div class="num-card"><div class="num-value">∞</div><div class="num-label">Possibilities</div></div>
     </div>
     <div class="about-text reveal">
-      <p class="section-tag">✦ NumbersTalk</p>
+      <p class="section-tag">✦ About Anaya</p>
       <h2 class="section-title">Numbers are the<br><em>language</em> the<br>universe speaks</h2>
       <div class="divider"></div>
       <p class="section-body">I am NumbersTalk — a numerologist, intuitive guide, and life path interpreter. For over a decade, I have helped individuals navigate careers, relationships, and purpose through the sacred geometry of numbers.</p>
@@ -314,6 +416,167 @@
       <div class="test-card reveal"><div class="test-quote">"</div><p class="test-text">I came skeptical and left transformed. The business name reading alone was worth every rupee. We rebranded and our revenue grew 3x within a year.</p><div class="test-name">Rahul Sinha</div><div class="test-role">Founder, Bangalore</div></div>
       <div class="test-card reveal"><div class="test-quote">"</div><p class="test-text">The relationship reading helped my husband and I understand each other on a soul level. We stopped fighting patterns we now finally understand.</p><div class="test-name">Aarti Bose</div><div class="test-role">Author, Delhi</div></div>
     </div>
+  </section>
+
+
+
+  <!-- ABOUT NUMEROLOGY -->
+  <section class="about-num" id="about-numerology">
+
+    <!-- Intro Banner -->
+    <div class="anum-intro reveal">
+      <p class="section-tag" style="color:var(--gold)">✦ What is Numerology?</p>
+      <h2 class="section-title">The Ancient Science<br>of <em>Numbers & Destiny</em></h2>
+      <p class="section-body" style="max-width:680px;margin:0 auto 0;">Numerology is one of the world's oldest mystical sciences — dating back over 4,000 years to ancient Babylon, Egypt, and Greece. It is the belief that numbers are the universal language through which the cosmos communicates with us. Every number vibrates at a unique frequency that influences personality, purpose, timing, and life events.</p>
+    </div>
+
+    <!-- How it benefits -->
+    <div class="anum-benefits reveal">
+      <div class="anum-benefits-title">
+        <p class="section-tag">✦ How It Benefits Your Life</p>
+        <h2 class="section-title">Numbers as a<br><em>Life Compass</em></h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <div class="benefit-name">Clarity of Purpose</div>
+          <div class="benefit-desc">Discover your soul's true mission and stop feeling lost. Your Life Path number reveals exactly what you came here to do.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">💼</div>
+          <div class="benefit-name">Career Alignment</div>
+          <div class="benefit-desc">Choose careers, business names, and launch dates that vibrate with your personal energy for maximum success and flow.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">❤️</div>
+          <div class="benefit-name">Relationship Harmony</div>
+          <div class="benefit-desc">Understand why certain people challenge or uplift you. Numerology reveals the energetic compatibility in every relationship.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">⏰</div>
+          <div class="benefit-name">Perfect Timing</div>
+          <div class="benefit-desc">Know when to act and when to wait. Personal year cycles help you ride life's natural rhythm instead of swimming against it.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🧠</div>
+          <div class="benefit-name">Self-Awareness</div>
+          <div class="benefit-desc">Uncover hidden strengths, blind spots, and karmic lessons that explain repeating patterns in your life.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🌱</div>
+          <div class="benefit-name">Personal Growth</div>
+          <div class="benefit-desc">Use your numbers as a roadmap for transformation — healing old wounds, breaking cycles, and stepping into your highest potential.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celebrity Section -->
+    <div class="anum-celebs reveal">
+      <div class="celebs-header">
+        <p class="section-tag" style="color:rgba(212,160,23,0.8)">✦ They Believe in the Power of Numbers</p>
+        <h2 class="section-title" style="color:#fff">Celebrities & Champions<br>Who Follow <em>Numerology</em></h2>
+        <p class="section-body" style="color:rgba(255,255,255,0.5)">From Bollywood icons to cricket legends — numerology has quietly guided some of the world's most successful people.</p>
+      </div>
+      <div class="celebs-category-label">🎬 Film & Entertainment</div>
+      <div class="celebs-grid">
+        <div class="celeb-card">
+          <div class="celeb-num">8</div>
+          <div class="celeb-name">Amitabh Bachchan</div>
+          <div class="celeb-role">Bollywood Legend</div>
+          <div class="celeb-fact">Changed the spelling of his surname from "Bachchan" on advice of numerologists. Life Path 8 — the number of power and rebirth. His career comeback after bankruptcy is a testament to the 8's resilience.</div>
+        </div>
+        <div class="celeb-card">
+          <div class="celeb-num">1</div>
+          <div class="celeb-name">Shah Rukh Khan</div>
+          <div class="celeb-role">King of Bollywood</div>
+          <div class="celeb-fact">Born on November 2, 1965 — Life Path 7, but his name vibration aligns with the leadership of 1. SRK has been known to consult numerologists for major film releases and business decisions.</div>
+        </div>
+        <div class="celeb-card">
+          <div class="celeb-num">33</div>
+          <div class="celeb-name">Oprah Winfrey</div>
+          <div class="celeb-role">Global Media Icon</div>
+          <div class="celeb-fact">Carries the rare Master Number 33 — the Master Teacher. Oprah openly credits spiritual sciences including numerology for guiding her life decisions and her rise from poverty to becoming the world's most influential woman.</div>
+        </div>
+        <div class="celeb-card">
+          <div class="celeb-num">22</div>
+          <div class="celeb-name">Bill Gates</div>
+          <div class="celeb-role">Tech Visionary</div>
+          <div class="celeb-fact">Life Path 22 — the Master Builder. Gates embodies the 22 energy: turning visionary ideas into world-changing reality. The number 22 is associated with building empires that benefit humanity at scale.</div>
+        </div>
+        <div class="celeb-card">
+          <div class="celeb-num">5</div>
+          <div class="celeb-name">Deepika Padukone</div>
+          <div class="celeb-role">Bollywood & Hollywood Star</div>
+          <div class="celeb-fact">Life Path 5 — the Adventurer. Deepika's fearless leap from Bollywood to Hollywood, her mental health advocacy, and her constantly evolving career perfectly embody the restless, transformative energy of number 5.</div>
+        </div>
+        <div class="celeb-card">
+          <div class="celeb-num">11</div>
+          <div class="celeb-name">A.R. Rahman</div>
+          <div class="celeb-role">Musical Genius</div>
+          <div class="celeb-fact">Carries Master Number 11 — the Illuminator. Rahman famously changed his name and religion, guided partly by spiritual and numerological counsel. His music transcends boundaries — a hallmark of the master 11 vibration.</div>
+        </div>
+      </div>
+
+      <!-- SPORTS SECTION -->
+      <div class="celebs-category-label" style="margin-top:60px">🏏 Cricket & Sports Legends</div>
+      <div class="celebs-grid">
+
+        <div class="celeb-card celeb-card-sport">
+          <div class="celeb-num sport-badge">33</div>
+          <div class="celeb-name">Hardik Pandya</div>
+          <div class="celeb-role">Indian Cricket Star · Jersey #33</div>
+          <div class="celeb-fact">Hardik deliberately wears jersey number 33 — a Master Number in numerology. 33 is the vibration of the Master Teacher: courage, transformation, and rising against all odds. After a major back surgery that nearly ended his career, Pandya returned stronger — the classic 33 resurrection story. 3+3 = 6, the number of harmony and recovery.</div>
+        </div>
+
+        <div class="celeb-card celeb-card-sport">
+          <div class="celeb-num sport-badge">9</div>
+          <div class="celeb-name">MS Dhoni</div>
+          <div class="celeb-role">Captain Cool · Jersey #7 → Life Path 9</div>
+          <div class="celeb-fact">Born on July 7, 1981 — his Life Path adds to 7 (the Seeker), but his legendary jersey #7 itself vibrates with spiritual mastery. More strikingly, Dhoni's full name "Mahendra Singh Dhoni" reduces to 9 in Chaldean — the number of completion and universal leadership. He led India to 3 ICC titles, completing every major trophy — pure 9 energy.</div>
+        </div>
+
+        <div class="celeb-card celeb-card-sport">
+          <div class="celeb-num sport-badge">18</div>
+          <div class="celeb-name">Virat Kohli</div>
+          <div class="celeb-role">Run Machine · Jersey #18 → reduces to 9</div>
+          <div class="celeb-fact">Kohli's iconic jersey #18 is no coincidence — 1+8 = 9, the most powerful completion number in numerology. The number 9 represents the pinnacle of achievement, relentless drive, and leaving a legacy. Kohli has broken nearly every batting record there is — and he does it with the fierce, unstoppable energy of a true 9.</div>
+        </div>
+
+        <div class="celeb-card celeb-card-sport">
+          <div class="celeb-num sport-badge">45</div>
+          <div class="celeb-name">Rohit Sharma</div>
+          <div class="celeb-role">Hitman · Jersey #45 → reduces to 9</div>
+          <div class="celeb-fact">Rohit Sharma's jersey number 45 — 4+5 = 9. The Hitman joined India's 9-energy jersey club, and the results speak: the 2023 ODI World Cup run, T20 World Cup 2024 triumph as captain. The number 9 in numerology rules leaders who complete grand cycles — Rohit literally completed India's 11-year ICC trophy drought.</div>
+        </div>
+
+        <div class="celeb-card celeb-card-sport">
+          <div class="celeb-num sport-badge">10</div>
+          <div class="celeb-name">Lionel Messi</div>
+          <div class="celeb-role">Football GOAT · Jersey #10 → reduces to 1</div>
+          <div class="celeb-fact">The legendary #10 — 1+0 = 1, the number of the ultimate leader and pioneer. Messi, born June 24, 1987, has a Life Path of 1 — the born champion who stands alone at the top. He completed his destiny by winning the 2022 World Cup, the one trophy that eluded him — the final chapter of a Life Path 1 story.</div>
+        </div>
+
+        <div class="celeb-card celeb-card-sport">
+          <div class="celeb-num sport-badge">23</div>
+          <div class="celeb-name">Michael Jordan</div>
+          <div class="celeb-role">Basketball Legend · Jersey #23 → reduces to 5</div>
+          <div class="celeb-fact">MJ's iconic #23 — 2+3 = 5, the number of freedom, reinvention, and dynamic movement. Jordan retired and came back — twice. He changed the game, built an empire, and defied every limit. The number 5 is the ultimate symbol of the unstoppable force that keeps evolving, which is exactly what Jordan embodies.</div>
+        </div>
+
+      </div>
+
+      <!-- Number 9 special callout -->
+      <div class="num9-callout reveal">
+        <div class="num9-icon">9</div>
+        <div class="num9-content">
+          <div class="num9-title">The Jersey Number 9 Phenomenon</div>
+          <div class="num9-desc">Notice a pattern? Virat Kohli #18, Rohit Sharma #45, MS Dhoni's name value — all reduce to <strong>9</strong>. In numerology, 9 is the most powerful single digit — the number of universal love, completion, and lasting legacy. It is no coincidence that India's greatest cricketers all carry the vibration of 9. The number 9 multiplied by any number always returns to 9 (9×2=18, 1+8=9). It is the only number that is truly indestructible.</div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+
   </section>
 
   <!-- CONTACT FORM -->
@@ -374,6 +637,7 @@
   </footer>
 
   <script>
+
     // ─── Particles ───
     const pC = document.getElementById('particles');
     if(pC){ for(let i=0;i<28;i++){ const p=document.createElement('div'); p.className='particle'; p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${3+Math.random()*5}s;--delay:${Math.random()*6}s;`; pC.appendChild(p); } }
@@ -429,7 +693,7 @@
 
         // ✅ 3. WhatsApp alert (opens WhatsApp with pre-filled message)
         // 🔧 STEP 4: Replace with Anaya's WhatsApp number (with country code, no + or spaces)
-        const waNumber = "917218983211";
+        const waNumber = "91976413693";
         const waMsg = encodeURIComponent(`🔮 New Booking!\n👤 ${name}\n📅 DOB: ${dob}\n📧 ${email}\n📱 ${phone}\n✨ Service: ${service}\n💬 ${message}`);
         // Opens WhatsApp silently as a notification link (won't redirect user)
         const waLink = `https://api.whatsapp.com/send?phone=${waNumber}&text=${waMsg}`;
